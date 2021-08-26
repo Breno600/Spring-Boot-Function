@@ -3,10 +3,10 @@ package br.com.study.project.controller;
 //import br.com.study.project.domain.model.Study;
 import br.com.study.project.domain.model.StudyInfo;
 import br.com.study.project.service.StudyService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import javassist.NotFoundException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -26,4 +26,23 @@ public class StudyController {
         return studyService.findAllStudy();
     }
 
+    @GetMapping("/name/{name}")
+    private ResponseEntity<StudyInfo> getName(@PathVariable("name") String nome) throws NotFoundException {
+        return ResponseEntity.ok(this.studyService.findNome(nome));
+    }
+
+    @GetMapping("/name/{name}/{sobrenome}")
+    private ResponseEntity<StudyInfo> getNameAndSobrenome(@PathVariable("name") String nome, @PathVariable("sobrenome") String sobrenome) throws NotFoundException {
+        return ResponseEntity.ok(this.studyService.findNomeAndSobrenome(nome,sobrenome));
+    }
+
+    @GetMapping("/sobrenome/{sobrenome}")
+    private ResponseEntity<StudyInfo> getSobrenome(@PathVariable("sobrenome") String sobrenome) throws NotFoundException {
+        return ResponseEntity.ok(this.studyService.findSobrenome(sobrenome));
+    }
+
+    @PostMapping("/save")
+    private ResponseEntity<StudyInfo> save(@RequestBody @Validated StudyInfo studyInfo){
+        return ResponseEntity.ok(this.studyService.save(studyInfo));
+    }
 }
